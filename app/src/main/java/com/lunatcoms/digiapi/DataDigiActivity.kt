@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Layout
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import com.lunatcoms.digiapi.databinding.ActivityDataDigiBinding
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +21,9 @@ class DataDigiActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDataDigiBinding
     private lateinit var digiId: String
+
+    private lateinit var imageFieldsView: List<ImageView>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +52,19 @@ class DataDigiActivity : AppCompatActivity() {
     private fun createUI(digimonster: DigimonsterDataResponse) {
         Picasso.get().load(digimonster.images[0].urlImage).into(binding.ivImageTop)
         binding.tvName.text = digimonster.name
-        binding.tvDescription.text = digimonster.descriptions[1].description
-        binding.tvDescription1.text = digimonster.descriptions[1].description
+
+        if (digimonster.descriptions.isNotEmpty()){
+            binding.tvDescription.text = digimonster.descriptions[1].description
+        }
+
+        imageFieldsView = listOf(binding.field1,binding.field2,binding.field3,binding.field4,binding.field5,binding.field6)
+
+        if (digimonster.fields.isNotEmpty()){
+            for(i in digimonster.fields.indices){
+                Picasso.get().load(digimonster.fields[i].imageField).into(imageFieldsView[i])
+                imageFieldsView[i].visibility = View.VISIBLE
+            }
+        }
 
         binding.tvDescription.justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
 
