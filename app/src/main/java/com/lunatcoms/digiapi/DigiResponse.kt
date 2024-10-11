@@ -10,7 +10,20 @@ data class Digimonster(
     @SerializedName("image") val image: String
 )
 
+data class DigimonsterDataResponse(
+    @SerializedName("name") val name: String,
+    @SerializedName("xAntibody") val genX: String,
+    @SerializedName("images") val images: List<Images>,
+    @SerializedName("descriptions") val descriptions: List<Description>
+)
 
+data class Images(
+    @SerializedName("href") val urlImage: String
+)
+
+data class Description(@SerializedName("description") val description: String)
 object ApiContants {
     const val BASE_URL = "https://digi-api.com/api/v1/"
+    const val ID_DIGITAL = "ID_DIGITAL"
+    const val ERROR = "Error"
 }

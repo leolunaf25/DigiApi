@@ -1,5 +1,6 @@
 package com.lunatcoms.digiapi
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,7 +29,7 @@ class MenuDigitalActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        adapter = DigiAdapter()
+        adapter = DigiAdapter() { digiId -> navigateToDataDigi(digiId) }
         binding.rvMain.layoutManager = LinearLayoutManager(this)
         binding.rvMain.adapter = adapter
 
@@ -36,24 +37,32 @@ class MenuDigitalActivity : AppCompatActivity() {
             try {
 
                 val callDigi = getRetrofit().create(APIDigi::class.java).getDigimon()
-                val digi = callDigi.body()?.content?.map { Digimonster(it.name, it.id, it.image) } ?: emptyList()
+                val digi = callDigi.body()?.content?.map { Digimonster(it.name, it.id, it.image) }
+                    ?: emptyList()
 
                 runOnUiThread {
-                    if (callDigi.isSuccessful){
-                        Log.i("Mensaje","Conectado")
+                    if (callDigi.isSuccessful) {
+                        Log.i("Mensaje", "Conectado")
 
                         adapter.updateList(digi)
 
+                    } else {
+                        Log.i("Mensake", "No conectado")
                     }
-                    else {Log.i("Mensake", "No conectado")}
 
                 }
 
 
-            } catch(e:IOException) {
+            } catch (e: IOException) {
 
             }
         }
+    }
+
+    private fun navigateToDataDigi(digiId: String) {
+        val intent = Intent(this, DataDigiActivity::class.java)
+        intent.putExtra(ApiContants.ID_DIGITAL, digiId)
+        startActivity(intent)
     }
 
 
