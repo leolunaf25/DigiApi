@@ -53,17 +53,21 @@ class DataDigiActivity : AppCompatActivity() {
         Picasso.get().load(digimonster.images[0].urlImage).into(binding.ivImageTop)
         binding.tvName.text = digimonster.name
 
-        if (digimonster.descriptions.isNotEmpty()){
+        if (digimonster.descriptions.isNotEmpty() && digimonster.descriptions.count()==2){
             binding.tvDescription.text = digimonster.descriptions[1].description
+        } else{
+            binding.tvDescription.text = "No hay descripción disponible"
         }
 
         imageFieldsView = listOf(binding.field1,binding.field2,binding.field3,binding.field4,binding.field5,binding.field6)
 
-        if (digimonster.fields.isNotEmpty()){
+        if (digimonster.fields.isNotEmpty() && digimonster.fields.count()>=1){
             for(i in digimonster.fields.indices){
                 Picasso.get().load(digimonster.fields[i].imageField).into(imageFieldsView[i])
                 imageFieldsView[i].visibility = View.VISIBLE
             }
+        }else{
+            binding.fieldNote.visibility = View.VISIBLE
         }
 
         binding.tvDescription.justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
